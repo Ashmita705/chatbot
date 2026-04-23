@@ -1,0 +1,31 @@
+from groq import Groq
+
+client = Groq(api_key="API_KEY")
+
+messages = []
+
+print("=" * 40)
+print("  AI Chatbot powered by Groq + LLaMA")
+print("  Type 'bye' to exit.")
+print("=" * 40)
+print()
+
+while True:
+    user_input = input("You: ").strip()
+    if not user_input:
+        continue
+    if user_input.lower() == "bye":
+        print("Bot: Goodbye! Have a great day!")
+        break
+    messages.append({"role": "user", "content": user_input})
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=messages
+        )
+        reply = response.choices[0].message.content
+        messages.append({"role": "assistant", "content": reply})
+        print(f"Bot: {reply}\n")
+    except Exception as e:
+        print(f"Error: {e}")
+        break
